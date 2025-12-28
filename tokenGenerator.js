@@ -226,49 +226,50 @@ function genRationalFraction(min, max, level = "R4"){
 // 👉 무리수 생성
 // -------------
 function genIrrationalRoot(min, max) {
-  // 1️⃣ 루트의 피제수 후보 생성 (min/max는 범위 참고용)
-  //    실제 값 범위보다 "표현 다양성"이 중요하므로 정수 기반
-  const base = Math.floor(Math.random() * 8) + 2; // 2~9
+  // ==================================================
+  // 1️⃣ 보드 범위 기반 피제수 상한
+  //    √base ≤ max  →  base ≤ max²
+  // ==================================================
+  const maxBase = Math.floor(max * max);
 
-  const value = Math.sqrt(base);
-
-  // 2️⃣ 완전제곱 판정
-  const isPerfectSquare = Number.isInteger(value);
+  let base;
+  let absValue;
 
   // ==================================================
-  // 3️⃣ 판정 결과에 따라 com_raw 완전 결정
+  // 2️⃣ 자연수 base 선택 (1 포함)
+  //    완전제곱 여부는 "배제"가 아니라 "분류" 대상
   // ==================================================
+  base = Math.floor(Math.random() * maxBase) + 1; // 1 ~ max²
+  absValue = Math.sqrt(base);
 
-  // ✔ √4, √9 같은 경우 → 유리수 (정수)
-  if (isPerfectSquare) {
-    return {
-      raw: `√${base}`,
-      value, // 2, 3 ...
-      com_raw: {
-        kind: "rational",        // 🔑 유리수
-        form: "root",            // 표현은 루트
-        decimalType: "finite",   // 유한소수 (정수 포함)
-        exact: true,             // 정확한 값
-        derivedFrom: "root",     // √n 에서 유도됨
-        base,                    // 디버그/표현용
-      },
-      difficulty: 3,
-    };
-  }
+  // ==================================================
+  // 3️⃣ 부호 결정 (±)
+  // ==================================================
+  const sign = Math.random() < 0.5 ? -1 : 1;
 
-  // ✔ √2, √3, √5 ... → 진짜 무리수
+  const value = sign * absValue;
+  const raw = sign === -1 ? `-√${base}` : `√${base}`;
+
+  // ==================================================
+  // 4️⃣ 판정 메타데이터 구성
+  // ==================================================
+  const isPerfectSquare = Number.isInteger(absValue);
+  console.log("tokenGen 257 :", value);
   return {
-    raw: `√${base}`,
-    value, // 근삿값 (위치 계산용)
+    raw,
+    value,
     com_raw: {
-      kind: "irrational",   // 🔑 무리수
-      form: "root",         // 루트형 무리수
-      exact: false,         // 정확한 값 아님
-      base,                 // √base
+      kind: isPerfectSquare ? "rational" : "irrational",
+      form: "root",
+      exact: isPerfectSquare,      // √1, √4, √9 …
+      derivedFrom: "root",
+      base,
+      sign,
     },
-    difficulty: 5,
+    difficulty: isPerfectSquare ? 2 : 5,
   };
 }
+
 
 
 //////////////////////////////////////////////

@@ -20,7 +20,8 @@ export class TokenCard {
     //const {raw, value} = this.generateNumver(context);
     // 토큰이 들고 있는 수식/값 (그대로 표현)
     this.raw = raw;
-    this.value = parseValue(raw)
+    this.value = value;
+    //this.value = parseValue(raw)
     this.com_raw = com_raw; // ⭐ 필수
     // 드래그 상태
     this.dragging = false;

@@ -68,6 +68,17 @@ export const JudgeRegistry = {
   const intValue = Math.floor(value);
   const cellRect = getCellRect_line(intValue, board);
 
+  console.log("INT CARD DEBUG judge 93", {
+    tokenValue: value,
+    tokenRaw:token.raw,
+    boardId: board.id,
+    boardMin: board.min,
+    boardMax: board.max,
+    rect,
+    cellRect,
+    fullyInside: rectFullyInside(rect, cellRect),
+  });
+
   // ⭐ 정확한 위치가 아니라 "해당 구간 안에 있으면 OK"
   return rectFullyInside_line(rect, cellRect);
  }
@@ -90,7 +101,7 @@ function judgeIntegerCard({ token, board }) {
   const tokenRect = token.getRect();
   const cellRect = getCellRect(value, board);
   // 🔍 핵심 디버그 (여기!)
-  console.log("INT CARD DEBUG", {
+  console.log("INT CARD DEBUG judge 93", {
     tokenValue: value,
     boardId: board.id,
     boardMin: board.min,
@@ -145,7 +156,7 @@ function getCellRect_line(value, board){ //(토큰정수만,보드)
   const input_x = board.x + cellWidth + cellWidth * 2*index_num;
   const out_x = input_x + 2*cellWidth;
   console.log("ttttttt",{
-    x: input_x,
+    inputX: input_x,
     out_x : out_x,
     y: board.y,
     width: cellWidth,
